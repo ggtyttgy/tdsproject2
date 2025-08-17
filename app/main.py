@@ -262,16 +262,23 @@ def answer_questions(text: str, uploads: Dict[str, UploadFile]) -> dict:
 
 # ----------------------- FastAPI route -----------------------
 
+from pydantic import BaseModel
+from typing import List
+
+class QuestionRequest(BaseModel):
+    questions: List[str]
+
 @app.post("/api/")
-async def api_root(questions: UploadFile = File(...), files: List[UploadFile] = File(default=[])):
+async def api_root(request: QuestionRequest):
     global START_OF_REQUEST
     START_OF_REQUEST = time.time()
     try:
-        qtext = read_text_file(questions)
-        others = {f.filename: f for f in files if f.filename != questions.filename}
-        out = answer_questions(qtext, others)
+        # Combine all questions into a single text blob
+        qtext = "\n".join(request.questions)
+        out = answer_questions(qtext, {})  # no files passed
         return JSONResponse(content=out)
     except TimeoutError as te:
         return JSONResponse(content={"error": "timeout", "partial": str(te)}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=200)
+
