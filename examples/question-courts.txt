@@ -1,0 +1,9 @@
+The Indian high court judgement dataset contains judgements from the Indian High Courts, downloaded from ecourts website (https://judgments.ecourts.gov.in/). It contains judgments of 25 high courts, along with raw metadata (as .json) and structured metadata (as .parquet).
+
+Answer the following questions and respond with a JSON object containing the answer.
+
+{
+  "Which high court disposed the most cases from 2019 - 2022?": "...",
+  "What's the regression slope of the date_of_registration - decision_date by year in the court=33_10?": "...",
+  "Plot the year and # of days of delay from the above question as a scatterplot with a regression line. Encode as a base64 data URI under 100,000 characters": "..."
+}
